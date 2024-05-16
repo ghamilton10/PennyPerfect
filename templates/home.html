@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="home">
+    <a href="{{ url_for('home') }}">
+        <img id="logo" src="{{ url_for('static', filename='logo.svg') }}"  alt="Your Logo">
+    </a>
+
+    {% if current_user %}
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('budget_calculator') }}">Budget Calculator</a></li>
+                <li><a href="{{ url_for('loan_calculator') }}">Loan Calculator</a></li>
+                <li><a href="{{ url_for('loan_calendar') }}">Loan Calendar</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    {% else %}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+    {% endif %}
+
+
+    <div class="container">
+        {% if current_user %}
+        <h1>Welcome back, {{ current_user.username }}!</h1>
+        <p>Your PennyPerfect dashboard is ready to help you stay on top of your finances.</p>
+        <p>You can use the <strong>Budget Calculator</strong> to add or update your expenses and track your spending
+            over time.</p>
+        <p>The <strong>Loan Calendar</strong> displays your upcoming loan payments, and the <strong>Loan
+                Calculator</strong> is available if you need to calculate details for a new loan or refinancing.</p>
+        <p>Let's continue working towards your financial goals!</p>
+        {% else %}
+        <h1>Welcome to PennyPerfect</h1>
+        <p>PennyPerfect is designed to help you manage your expenses and budget effectively.</p>
+        <p>You can use the <strong>Budget Calculator</strong> to add your expenses and track them over time.</p>
+        <p>The <strong>Loan Calendar</strong> allows you to view and manage your loan payments.</p>
+        <p>And the <strong>Loan Calculator</strong> helps you calculate loan details such as monthly payments and
+            interest rates.</p>
+        <p>Feel free to explore the features and start managing your finances better!</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

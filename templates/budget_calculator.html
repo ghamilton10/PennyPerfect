@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Calculator</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+
+<body>
+
+    <a href="{{ url_for('home') }}">
+        <img id="logo" src="{{ url_for('static', filename='logo.svg') }}" alt="Your Logo">
+    </a>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('budget_calculator') }}">Budget Calculator</a></li>
+                <li><a href="{{ url_for('loan_calculator') }}">Loan Calculator</a></li>
+                <!-- Update the link to 'loan_calculator' instead of 'loan_calendar' -->
+                <li><a href="{{ url_for('loan_calendar') }}">Loan Calendar</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container2">
+        <h1>Budget Calculator</h1>
+        <!-- Form to input monthly income -->
+        <form id="income-form" action="/set_monthly_income" method="POST">
+            <label for="monthly_income">Monthly Income:</label>
+            <input type="text" id="monthly_income" name="monthly_income" oninput="formatNumber(this)"
+            value="{{ '%.2f'|format(session.get('monthly_income', 0) | float) }}" required><br><br><button
+                type="submit">Set Monthly Income</button>
+        </form>
+
+        <!-- Your budget calculator form -->
+        <!-- Form to add new expenses -->
+        <form id="expense-form" action="/budget_calculator" method="POST">
+            <div>
+                <label for="expense_name">Expense Name:</label>
+                <input type="text" id="expense_name" name="expense_name" required><br><br>
+            </div>
+
+            <div>
+                <label for="expense_amount">Expense Amount:</label>
+                <input type="number" id="expense_amount" name="expense_amount" step="0.01" required><br><br>
+            </div>
+
+            <div>
+                <button type="submit">Add Expense</button>
+            </div>
+        </form>
+
+        <div class="insights" {% if expenses %}style="display: block;" {% else %}style="display: none;" {% endif %}>
+            <!-- Display total expenses and budget status -->
+            <div class="expense-summary">
+                <h2 class=" expenseTitle">Expenses Summary</h2>
+                <div class="expenseSummary">Total Expenses: ${{ '{:,.2f}'.format(total_expenses) }}</div>
+                <div class="expenseSummary">{{ budget_status }}</div>
+            </div>
+            <div class="expenses">
+                <h2 class="expenseH2">Expenses</h2>
+                <ul class="expenseList">
+                    {% for expense in expenses %}
+                    <li class="expenseItem">
+                        <span class="expenseDetails">
+                            {{ expense.name }} - ${{ '%.2f'|format(expense.amount) }}
+                        </span>
+                        <form action="/delete_expense/{{ expense.id }}" method="POST" class="delete-form">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- Display the pie chart -->
+            <div class="pie" style="text-align: center;">
+                {% if plot_url %}
+                <img src="data:image/png;base64,{{ plot_url }}" alt="Pie Chart">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add event listener for adding expense fields
+            document.getElementById('add-expense-btn').addEventListener('click', function () {
+                var expenseFields = document.getElementById('expense-fields');
+                var newExpenseField = document.createElement('div');
+                newExpenseField.className = 'expense-field';
+                newExpenseField.innerHTML = `
+                    <label for="expense_name">Expense Name:</label>
+                    <input type="text" name="expense_name[]" required>
+                    
+                    <label for="expense_amount">Amount ($):</label>
+                    <input type="number" name="expense_amount[]" min="0" step="0.01" required inputmode="decimal">
+                    <button type="button" class="remove-expense-btn">Remove</button>
+                `;
+                expenseFields.appendChild(newExpenseField);
+            });
+        });
+    </script>
+</body>
+
+</html>

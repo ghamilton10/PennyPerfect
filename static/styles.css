@@ -1,0 +1,370 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  height: 100vh;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#logo {
+  display: block;
+  margin: 0 auto;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 0.625rem 0;
+  text-align: center;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 1.25rem;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 80vw;
+  margin: 0 auto;
+  margin-top: 60px;
+  padding: 1.25rem;
+  border-radius: 0.3125rem;
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  text-align: center;
+}
+
+.expense-field {
+  margin-bottom: 0.625rem;
+}
+
+#add-expense-btn {
+  display: block;
+  width: 100%;
+  max-width: 12.5rem;
+  margin: 1.25rem auto 0.625rem;
+}
+
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin-top: 1.25rem;
+  margin: 0 auto;
+}
+
+table,
+th,
+td {
+  border: 0.0625rem solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+td {
+  background-color: white;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+#submit-expenses-btn {
+  display: block;
+  margin: 0 auto;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 10rem;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.loan-field {
+  display: flex;
+  margin-bottom: 1.25rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+#loan-form {
+  max-width: 62.5rem;
+}
+
+#loan-form input {
+  width: 30%;
+}
+
+.budgetpage {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 56.25rem; 
+  margin: 0 auto 6.25rem; 
+  padding-left: 2.8125rem;
+  padding-right: 2.8125rem; 
+  padding: 0.3125rem 2.5rem 2.5rem 1.875rem;
+  text-align: center;
+  box-shadow: 0 0 0.625rem 0 rgba(0, 0, 0, 0.2), 0 0.3125rem 0.3125rem 0 rgba(0, 0, 0, 0.24); /* converted from 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24) */
+  border-radius: 1.25rem; 
+}
+
+.rowA {
+  display: flex;
+  flex-direction: row;
+}
+
+#expense-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: -5rem; 
+}
+
+#income-form, #expense-form {
+  box-shadow: none;
+  width: 90vw;
+}
+
+#income-form input {
+  height: 0.625rem;
+}
+
+#income-form label {
+  width: 16.875rem;
+}
+
+#income-form button {
+  height: 2.8125rem;
+  width: 12.5rem;
+}
+
+form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  margin: 0 auto 6.25rem;
+  text-align: center;
+  box-shadow: 0 0 1.25rem 0 rgba(0, 0, 0, 0.2), 0 0.3125rem 0.3125rem 0 rgba(0, 0, 0, 0.24); /* converted from 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24) */
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+form label {
+  text-align: center;
+}
+
+form input {
+  width: 80%;
+  padding: 0.625rem;
+  border-radius: 0.3125rem;
+  border: 0.0625rem solid #DDDDDD;
+  color: black;
+  font-family: "Roboto Mono", sans-serif;
+  box-shadow: 0.0625rem 0.3125rem 0.5625rem rgba(211, 211, 211, .7);
+}
+
+#username, #first_name, #email, #password, #confirm-password {
+  width: 40%;
+}
+
+form input[type="submit"] {
+  width: 40%;
+  padding: 0.625rem;
+  background: linear-gradient(90deg, #003A74, #006AD5);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.9375rem;
+  font-size: 2rem;
+}
+
+button {
+  width: auto;
+  padding: 0.75rem 1.25rem;
+  background: #4CAF50;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.3125rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.expense-summary {
+  background-color: #ffffff;
+  width: 90vw;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.expense-summary h2,
+.expense-summary p {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pie_chart {
+  text-align: center;
+  border: 0.125rem solid #4CAF50;
+}
+
+.insights {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  margin: 0 auto;
+  margin-top: -5rem;
+  width: 90vw;
+  text-align: center;
+  box-shadow: 0 0 1.25rem 0 rgba(0, 0, 0, 0.2), 0 0.3125rem 0.3125rem 0 rgba(0, 0, 0, 0.24); /* converted from 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24) */
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pie {
+  width: 90vw;
+}
+
+.pie img {
+  max-width: 90vw;
+}
+
+.expenses h2,
+.expenses ul {
+  padding: 0.0625rem;
+  margin: 1.25rem auto;
+}
+
+.expenseList {
+  list-style: none;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.expenseItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.3125rem;
+  font-weight: 600;
+}
+
+.expenseDetails {
+  width: 100%;  
+}
+
+form .delete-btn {
+  background-color: transparent;
+  background: #d32f2f;
+  box-shadow: none;
+  border-radius: 0.3125rem;
+  color: black;
+}
+
+#loanDelete {
+  width: 100%;
+  height: 100%;
+}
+
+form .delete-btn:hover {
+  color: #fff;
+}
+
+.expenses {
+  background-color: white;
+  padding: 0;
+  margin: 0 auto;
+  margin-top: 1.25rem;
+  width: 40%;
+}
+
+.expense-field {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+}
+
+.delete-form {
+  background-color: transparent;
+  box-shadow: none;
+  display: inline-block;
+  margin: 0.0625rem;
+}
+
+.expenseH2 {
+  text-align: center;
+  margin: 0 auto !important;
+  width: fit-content;
+}
+
+.highlighted-date {
+  background-color: #f0e68c; /* or any color you prefer */
+  color: black; /* text color */
+  font-weight: bold;
+}

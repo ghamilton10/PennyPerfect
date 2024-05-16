@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+  <a href="{{ url_for('home') }}">
+    <img id="logo" src="{{ url_for('static', filename='logo.svg') }}" alt="Your Logo">
+  </a>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('budget_calculator') }}">Budget Calculator</a></li>
+        <li><a href="{{ url_for('loan_calculator') }}">Loan Calculator</a></li>
+        <!-- Update the link to 'loan_calculator' instead of 'loan_calendar' -->
+        <li><a href="{{ url_for('loan_calendar') }}">Loan Calendar</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <div class="loan-calculator">
+    <div class="top">
+      <h1>Loan Calculator</h1>
+
+      <form id="loan-form" action="/loan_calculator" method="POST">
+        <div id="loan-fields">
+          <!-- Initial loan fields -->
+          <div class="loan-field">
+            <label for="loan_name">Loan Name:</label>
+            <input type="text" name="loan_name" required><br><br>
+
+            <label for="loan_amount">Loan Amount:</label>
+            <input type="number" name="loan_amount" step="0.01" required><br><br>
+          </div>
+
+          <div class="loan-field">
+            <label for="loan_interest">Loan Interest:</label>
+            <input type="number" name="loan_interest" step="0.01" required><br><br>
+
+            <label for="loan_repayment">Loan Repayment Date:</label>
+            <input type="date" name="loan_repayment" required><br><br>
+          </div>
+
+          <button type="submit">Submit</button>
+        </div>
+    </div>
+    <br><br>
+    </form>
+  </div>
+
+  <div class="existing-loans">
+    <h1>Existing Loans</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Interest Rate</th>
+          <th>Repayment Start Date</th>
+          <th>Monthly Payment</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for loan in loans %}
+        <tr>
+          <td>{{ loan.name }}</td>
+          <td>${{ '%.2f'|format(loan.amount) }}</td>
+          <td>{{ loan.interest_rate }}%</td>
+          <td>{{ loan.term_months }}</td>
+          <td></td>
+          <td>
+            <form action="/delete_loan/{{ loan.id }}" method="POST" class="delete-form">
+              <button type="submit" class="delete-btn" id="loanDelete">Delete</button>
+            </form>
+          </td>
+          <!-- Add more table cells for additional fields -->
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Function to calculate monthly payment
+      function calculateMonthlyPayment(loanAmount, interestRate, termMonths) {
+        // Convert annual interest rate to monthly rate
+        var monthlyRate = interestRate / 100 / 12;
+        // Calculate monthly payment using formula
+        var monthlyPayment = loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -termMonths));
+        // Round to two decimal places
+        return monthlyPayment.toFixed(2);
+      }
+
+      // Loop through each row in the table
+      var rows = document.querySelectorAll('.existing-loans tbody tr');
+      rows.forEach(function(row) {
+        // Get loan details from the row
+        var loanAmount = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace('$', ''));
+        var interestRate = parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('%', ''));
+        var termMonths = parseInt(row.querySelector('td:nth-child(4)').textContent);
+
+        // Calculate monthly payment
+        var monthlyPayment = calculateMonthlyPayment(loanAmount, interestRate, termMonths);
+
+        // Insert monthly payment into the respective table cell
+        var monthlyPaymentCell = row.querySelector('td:nth-child(5)');
+        monthlyPaymentCell.textContent = '$' + monthlyPayment;
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

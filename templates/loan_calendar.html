@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../static/styles.css">
+  <link rel="stylesheet" href="../static/calendar.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../static/script.js"></script>
+</head>
+
+<body>
+
+  <div>
+    <!-- New Header with Navigation and Logo -->
+    <a href="{{ url_for('home') }}">
+      <img id="logo" src="{{ url_for('static', filename='logo.svg') }}" alt="Your Logo">
+    </a>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('budget_calculator') }}">Budget Calculator</a></li>
+          <li><a href="{{ url_for('loan_calculator') }}">Loan Calculator</a></li>
+          <!-- Update the link to 'loan_calculator' instead of 'loan_calendar' -->
+          <li><a href="{{ url_for('loan_calendar') }}">Loan Calendar</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+  </div>
+
+  <div class="calendar">
+    <div class="header">
+      <button id="prevBtn">&lt;</button>
+      <h1 id="monthYear"></h1>
+      <button id="nextBtn">&gt;</button>
+    </div>
+    <div class="days">
+      <div class="day">Sun</div>
+      <div class="day">Mon</div>
+      <div class="day">Tue</div>
+      <div class="day">Wed</div>
+      <div class="day">Thu</div>
+      <div class="day">Fri</div>
+      <div class="day">Sat</div>
+    </div>
+    <div class="dates " id="dates">
+      <div class="date" data-day="1">1</div>
+      <div class="date" data-day="2">2</div>
+      <div class="date" data-day="3">3</div>
+      <div class="date" data-day="4">4</div>
+      <div class="date" data-day="5">5</div>
+      <div class="date" data-day="6">6</div>
+    </div>
+  </div>
+
+  <!-- Modal for Event Details -->
+  <div class="modal event show-modal hidden" id="eventModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="eventDate"></h2>
+      <div class="area" id="eventDescription">
+        <h1>EDFinacial</h1>
+        <h1>Loan Balance: $2500</h1>
+        <h1>Interest Rate: 3.5%</h1>
+      </div>
+      <button id="saveEventBtn">Save</button>
+    </div>
+  </div>
+
+
+</body>
+
+<script>
+  const currentDate = new Date();
+  let currentMonth = currentDate.getMonth();
+  let currentYear = currentDate.getFullYear();
+
+  const monthYearElement = document.getElementById('monthYear');
+  const datesElement = document.getElementById('dates');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const eventModal = document.getElementById('eventModal');
+  const eventDate = document.getElementById('eventDate');
+  const eventDescription = document.getElementById('eventDescription');
+  const saveEventBtn = document.getElementById('saveEventBtn');
+  let selectedDate = null;
+
+  // Generate calendar for the current month
+  generateCalendar(currentMonth, currentYear);
+
+  // Event listener for previous and next buttons
+  prevBtn.addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    generateCalendar(currentMonth, currentYear);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    generateCalendar(currentMonth, currentYear);
+  });
+
+  // Function to generate the calendar
+  function generateCalendar(month, year) {
+    monthYearElement.textContent = new Date(year, month).toLocaleString('default', { month: 'long' }) + ' ' + year;
+    datesElement.innerHTML = '';
+
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+    const startDay = firstDayOfMonth.getDay();
+    const endDay = lastDayOfMonth.getDate();
+
+    for (let i = 0; i < startDay; i++) {
+      const dateElement = document.createElement('div');
+      dateElement.classList.add('date');
+      datesElement.appendChild(dateElement);
+    }
+
+    for (let day = 1; day <= endDay; day++) {
+      const dateElement = document.createElement('div');
+      dateElement.textContent = day;
+      dateElement.classList.add('date');
+      
+      // Special condition for May 16th
+      if (month === 4 && day === 16) { // Month is 4 for May because January is 0
+        dateElement.classList.add('highlighted-date');
+        dateElement.textContent += " (EDFinacial Payment Reminder: $321.09!)"; // Add custom text
+      }
+      if (month === currentDate.getMonth() && year === currentDate.getFullYear() && day === currentDate.getDate()) {
+        dateElement.classList.add('current-month');
+      }
+      dateElement.addEventListener('click', () => openEventModal(year, month, day));
+      datesElement.appendChild(dateElement);
+    }
+  }
+
+  // Function to open the event modal
+  function openEventModal(year, month, day) {
+    selectedDate = new Date(year, month, day);
+    eventDate.textContent = selectedDate.toDateString();
+    eventDescription.value = getEventDescription(selectedDate) || '';
+    eventModal.style.display = 'block';
+  }
+
+  // Function to close the event modal
+  function closeEventModal() {
+    eventModal.style.display = 'none';
+  }
+
+  // Function to save the event
+  function saveEvent() {
+    const description = eventDescription.value;
+    setEventDescription(selectedDate, description);
+    closeEventModal();
+  }
+
+  // Event listener for save button
+  saveEventBtn.addEventListener('click', saveEvent);
+
+  // Function to get event description from local storage
+  function getEventDescription(date) {
+    const key = date.toDateString();
+    return localStorage.getItem(key);
+  }
+
+  // Function to save event description to local storage
+  function setEventDescription(date, description) {
+    const key = date.toDateString();
+    localStorage.setItem(key, description);
+  }
+
+  // Event listener for modal close button
+  const closeBtn = document.getElementsByClassName('close')[0];
+  closeBtn.addEventListener('click', closeEventModal);
+
+  // Event listener for outside modal click
+  window.addEventListener('click', (event) => {
+    if (event.target === eventModal) {
+      closeEventModal();
+    }
+
+  });
+
+</script>
+
+</html>
